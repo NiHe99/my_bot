@@ -45,8 +45,14 @@ def generate_launch_description():
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'my_bot'],
                         output='screen')
-
-
+    
+    cloud_params = os.path.join(get_package_share_directory('my_bot'),'config','cloud.yaml')
+    
+    point_cloud = Node(package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
+                        parameters=[{'scan_time': 0.1},{'angle_min': -0.5445},{'angle_max': 0.5445},{'target_frame':'camera_link_optical'},{'range_min':0.00},{'range_max':100.0},{'min_height':0.0},{'max_height':1.0},{'use_inf':False}],
+                        remappings=[('/cloud_in','/camera/points')]
+                        )
+    
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -81,7 +87,7 @@ def generate_launch_description():
     # Launch them all!
     return LaunchDescription([
         rsp,
-
+        point_cloud, 
         gazebo,
         spawn_entity,
         diff_drive_spawner,
