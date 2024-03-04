@@ -46,13 +46,18 @@ def generate_launch_description():
                                    '-entity', 'my_bot'],
                         output='screen')
     
-    cloud_params = os.path.join(get_package_share_directory('my_bot'),'config','cloud.yaml')
+#    cloud_params = os.path.join(get_package_share_directory('my_bot'),'config','cloud.yaml')
     
     point_cloud = Node(package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
-                        parameters=[{'scan_time': 0.1},{'angle_min': -0.5445},{'angle_max': 0.5445},{'target_frame':'camera_link_optical'},{'range_min':0.00},{'range_max':100.0},{'min_height':0.0},{'max_height':1.0},{'use_inf':False}],
+                        parameters=[{'scan_time': 0.1},{'angle_min': -0.5445},{'angle_max': 0.5445},{'target_frame':'camera_link'},{'range_min':0.05},{'range_max':8.0},{'min_height':0.0},{'max_height':1.0},{'use_inf':True}],
                         remappings=[('/cloud_in','/camera/points')]
-                        )
-    
+                      )
+#   depth_image = Node(package='depthimage_to_laserscan', executable='depthimage_to_laserscan_node',
+#                       parameters=[{'scan_time':0.1}],
+#                        remappings=[('/image','/camera/depth/image_raw'),
+#                                    ('/camera_info','/camera/depth/camera_info')]
+#                       )
+
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -87,8 +92,9 @@ def generate_launch_description():
     # Launch them all!
     return LaunchDescription([
         rsp,
-        point_cloud, 
         gazebo,
+        point_cloud,
+        #depth_image, 
         spawn_entity,
         diff_drive_spawner,
         joint_broad_spawner

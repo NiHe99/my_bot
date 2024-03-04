@@ -6,3 +6,14 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/di
 
 ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/my_bot/config/mapper_params_online_async.yaml use_sim_time:=true
 
+
+ros2 launch my_bot launch_sim.launch.py world:=src/my_bot/config/Obstacle_world 
+
+ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=test_map.yaml -p use_sim_time:=true
+
+ros2 run nav2_util lifecycle_bringup map_server
+
+ros2 run nav2_amcl amcl --ros-args -p use_sim_time:=true
+
+ ros2 run nav2_util lifecycle_bringup amcl
+
