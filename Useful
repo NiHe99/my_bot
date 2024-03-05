@@ -9,7 +9,7 @@ ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/my_bot/c
 
 ros2 launch my_bot launch_sim.launch.py world:=src/my_bot/config/Obstacle_world 
 
-ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=test_map.yaml -p use_sim_time:=true
+ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=Mit_wand.yaml -p use_sim_time:=true
 
 ros2 run nav2_util lifecycle_bringup map_server
 
@@ -17,3 +17,11 @@ ros2 run nav2_amcl amcl --ros-args -p use_sim_time:=true
 
  ros2 run nav2_util lifecycle_bringup amcl
 
+
+    <xacro:if value="$(arg use_ros2_control)">
+        <xacro:include filename="ros2_control.xacro" />
+    </xacro:if>
+    <xacro:unless value="$(arg use_ros2_control)">
+        <xacro:include filename="gazebo_control.xacro" />
+    </xacro:unless>
+  

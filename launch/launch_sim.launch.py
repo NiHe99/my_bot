@@ -6,14 +6,14 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 
 def generate_launch_description():
 
-
+    use_sim_time = LaunchConfiguration('use_sim_time')
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
@@ -57,6 +57,15 @@ def generate_launch_description():
 #                        remappings=[('/image','/camera/depth/image_raw'),
 #                                    ('/camera_info','/camera/depth/camera_info')]
 #                       )
+    r_l_params = os.path.join(get_package_share_directory('my_bot'),'config','robot_local.yaml')    
+    robot_localization_node = Node(
+       package='robot_localization',
+       executable='ekf_node',
+       name='ekf_filter_node',
+       output='screen',
+       parameters=[r_l_params, {'use_sim_time': use_sim_time}],
+        remappings=[('/odometry/filtered','/odom')]
+    )
 
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -93,8 +102,9 @@ def generate_launch_description():
     return LaunchDescription([
         rsp,
         gazebo,
-        point_cloud,
+        #point_cloud,
         #depth_image, 
+        robot_localization_node,
         spawn_entity,
         diff_drive_spawner,
         joint_broad_spawner
