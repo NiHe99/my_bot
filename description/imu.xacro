@@ -4,7 +4,7 @@
     <link name="imu_link">
         <visual>
             <geometry>
-                <box size="0.1 0.1 0.1"/>
+                <box size="0.01 0.01 0.01"/>
             </geometry>
         </visual>
 
@@ -19,7 +19,7 @@
     <joint name="imu_joint" type="fixed">
         <parent link="base_link"/>
         <child link="imu_link"/>
-        <origin xyz="0 0 0.01"/>
+        <origin xyz="0 0 0.1"/>
     </joint>
 
     <gazebo reference="imu_link">
@@ -88,6 +88,5 @@
             </linear_acceleration>
         </sensor>
     </gazebo>
-
 
 </robot>
