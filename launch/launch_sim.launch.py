@@ -69,13 +69,13 @@ def generate_launch_description():
 
     diff_drive_spawner = Node(
         package="controller_manager",
-        executable="spawner",
+        executable="spawner.py",
         arguments=["diff_cont"],
     )
 
     joint_broad_spawner = Node(
         package="controller_manager",
-        executable="spawner",
+        executable="spawner.py",
         arguments=["joint_broad"],
     )
 
@@ -106,6 +106,6 @@ def generate_launch_description():
         #depth_image, 
         robot_localization_node,
         spawn_entity,
-        diff_drive_spawner,
-        joint_broad_spawner
+        #diff_drive_spawner,
+        #joint_broad_spawner
     ])
